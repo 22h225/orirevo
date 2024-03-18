@@ -1251,6 +1251,15 @@ function buildModel_Cylindrical_Flap() {
       let x0 = unitWidth * i + (maxX - pLine[j].x) * Math.sin(Math.PI / N);
       let x1 = unitWidth * i + (maxX - pLine[j+1].x) * Math.sin(Math.PI / N);
       cpEdges.push(new CPEdge(new Vec2d(x0, h[j]), new Vec2d(x1, h[j+1]), EDGE_TYPE_VALLEY));
+
+      if(bDrawGlueArea && i == 0) {
+        let x = - unitWidth * 0.2;
+        let x0 = unitWidth * -1 + (maxX - pLine[j].x) * Math.sin(Math.PI / N);
+        let x1 = unitWidth * -1 + (maxX - pLine[j+1].x) * Math.sin(Math.PI / N);
+        if(x < x0 && x < x1) cpEdges.push( new CPEdge(new Vec2d(x0, h[j]), new Vec2d(x1, h[j+1]), EDGE_TYPE_VALLEY));
+        else if(x < x0) cpEdges.push( new CPEdge(new Vec2d(x0, h[j]), new Vec2d(x, h[j+1] + (h[j] - h[j+1]) / (x0 - x1) * (x - x1)), EDGE_TYPE_VALLEY));
+        else if(x < x1) cpEdges.push( new CPEdge(new Vec2d(x, h[j] + (h[j+1] - h[j]) / (x1 - x0) * (x - x0)), new Vec2d(x1, h[j+1]), EDGE_TYPE_VALLEY));
+      }
     }
 
     // 横線
